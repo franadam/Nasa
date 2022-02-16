@@ -17,10 +17,10 @@ launches.set(launch.flightNumber, launch);
 
 const getAllLaunches = () => Array.from(launches.values());
 
-const addLaunche = (launch) => {
+const addLaunch = (launch) => {
   latestFlightNumber++;
 
-  const newLaunche = {
+  const newLaunch = {
     ...launch,
     flightNumber: latestFlightNumber,
     upcoming: true,
@@ -29,16 +29,43 @@ const addLaunche = (launch) => {
   };
 
   launches.set(latestFlightNumber, {
-    launch: newLaunche,
+    launch: newLaunch,
   });
 
-  return newLaunche;
+  return newLaunch;
 };
 
-const destroyLaunche = (flightNumber) => {
-  const deletedLaunche = launches.get(parseInt(flightNumber));
+const abortLaunch = (flightNumber) => {
+  const abortedLaunch = launches.get(parseInt(flightNumber));
+
+  const abort = {
+    ...abortedLaunch.launch,
+    upcoming: false,
+    success: false,
+  };
+
+  destroyLaunch(flightNumber);
+  launches.set(flightNumber, abort);
+
+  return abort;
+};
+
+const launchExist = (flightNumber) => {
+  return launches.has(parseInt(flightNumber));
+};
+
+const destroyLaunch = (flightNumber) => {
+  flightNumber = parseInt(flightNumber);
+  const deletedLaunch = launches.get(flightNumber);
   launches.delete(flightNumber);
-  return deletedLaunche;
+  return deletedLaunch;
 };
 
-module.exports = { launches, getAllLaunches, addLaunche, destroyLaunche };
+module.exports = {
+  launches,
+  getAllLaunches,
+  addLaunch,
+  destroyLaunch,
+  abortLaunch,
+  launchExist,
+};

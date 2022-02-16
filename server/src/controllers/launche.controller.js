@@ -1,17 +1,18 @@
 const { StatusCodes } = require('http-status-codes');
-const { BadRequestError } = require('../errors');
+const { BadRequestError, NotFoundError } = require('../errors');
 
 const {
   getAllLaunches,
-  addLaunche,
-  destroyLaunche,
+  addLaunch,
+  launchExist,
+  abortLaunch,
 } = require('../models/launche.model');
 
 const httpGetAllLaunches = async (req, res) => {
   return res.status(StatusCodes.OK).json(getAllLaunches());
 };
 
-const httpCreateLaunche = async (req, res) => {
+const httpCreateLaunch = async (req, res) => {
   let { mission, rocket, launchDate, destination } = req.body;
   if (!mission || !rocket || !launchDate || !destination)
     throw new BadRequestError(
@@ -24,12 +25,13 @@ const httpCreateLaunche = async (req, res) => {
 
   return res
     .status(StatusCodes.OK)
-    .json(addLaunche({ mission, rocket, launchDate, destination }));
+    .json(addLaunch({ mission, rocket, launchDate, destination }));
 };
 
-const httpDleteLaunche = async (req, res) => {
+const httpDleteLaunch = async (req, res) => {
   const flightNumber = req.params.flightNumber;
-  return res.status(StatusCodes.OK).json(destroyLaunche(flightNumber));
+  if (!launchExist(flightNumber)) throw new NotFoundError('Lauch not found');
+  return res.status(StatusCodes.OK).json(abortLaunch(flightNumber));
 };
 
-module.exports = { httpGetAllLaunches, httpCreateLaunche, httpDleteLaunche };
+module.exports = { httpGetAllLaunches, httpCreateLaunch, httpDleteLaunch };
