@@ -1,8 +1,13 @@
 const express = require('express');
-const { getAllLaunches } = require('../controllers/launche.controller');
+const {
+  httpGetAllLaunches,
+  httpCreateLaunche,
+  httpDleteLaunche,
+} = require('../controllers/launche.controller');
 
 const router = express.Router();
 
-router.route('/').get(getAllLaunches);
+router.route('/').get(httpGetAllLaunches).post(httpCreateLaunche);
+router.route('/:flightNumber').delete(httpDleteLaunche);
 
 module.exports = router;

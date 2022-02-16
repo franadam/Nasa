@@ -1,9 +1,9 @@
 const { StatusCodes } = require('http-status-codes');
 
-const { planets } = require('../models/planet.model');
+const { getAllPlanets } = require('../models/planet.model');
 
-const getAllPlanets = async (req, res) => {
-  return res.status(StatusCodes.OK).json(planets);
+const httpGetAllPlanets = async (req, res) => {
+  return res.status(StatusCodes.OK).json(getAllPlanets());
 };
 
-module.exports = { getAllPlanets };
+module.exports = { httpGetAllPlanets };
