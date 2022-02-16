@@ -1,4 +1,3 @@
-require('express-async-errors');
 const http = require('http');
 
 const app = require('./app');

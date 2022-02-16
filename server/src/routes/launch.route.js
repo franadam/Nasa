@@ -3,7 +3,7 @@ const {
   httpGetAllLaunches,
   httpCreateLaunch,
   httpDleteLaunch,
-} = require('../controllers/launche.controller');
+} = require('../controllers/launch.controller');
 
 const router = express.Router();
 

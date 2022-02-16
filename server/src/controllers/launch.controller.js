@@ -6,7 +6,7 @@ const {
   addLaunch,
   launchExist,
   abortLaunch,
-} = require('../models/launche.model');
+} = require('../models/launch.model');
 
 const httpGetAllLaunches = async (req, res) => {
   return res.status(StatusCodes.OK).json(getAllLaunches());
@@ -24,13 +24,13 @@ const httpCreateLaunch = async (req, res) => {
     throw new BadRequestError('Invalid lunch date');
 
   return res
-    .status(StatusCodes.OK)
+    .status(StatusCodes.CREATED)
     .json(addLaunch({ mission, rocket, launchDate, destination }));
 };
 
 const httpDleteLaunch = async (req, res) => {
   const flightNumber = req.params.flightNumber;
-  if (!launchExist(flightNumber)) throw new NotFoundError('Lauch not found');
+  if (!launchExist(flightNumber)) throw new NotFoundError('Launch not found');
   return res.status(StatusCodes.OK).json(abortLaunch(flightNumber));
 };
 

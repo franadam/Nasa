@@ -1,10 +1,11 @@
+require('express-async-errors');
 const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 
 const planetRouter = require('./routes/planet.router');
-const launcheRouter = require('./routes/launche.route');
+const launcheRouter = require('./routes/launch.route');
 
 // middlewares
 const errorHandlerMiddleware = require('./middlewares/error-handler.middleware');
