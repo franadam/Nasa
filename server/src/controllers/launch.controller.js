@@ -3,17 +3,19 @@ const { BadRequestError, NotFoundError } = require('../errors');
 
 const {
   getAllLaunches,
-  addLaunch,
-  launchExist,
+  isLaunchExist,
   abortLaunch,
+  scheduleNewLaunch,
 } = require('../models/launch.model');
 
 const httpGetAllLaunches = async (req, res) => {
-  return res.status(StatusCodes.OK).json(getAllLaunches());
+  const launches = await getAllLaunches();
+  return res.status(StatusCodes.OK).json(launches);
 };
 
 const httpCreateLaunch = async (req, res) => {
-  let { mission, rocket, launchDate, destination } = req.body;
+  const launch = req.body;
+  let { mission, rocket, launchDate, destination } = launch;
   if (!mission || !rocket || !launchDate || !destination)
     throw new BadRequestError(
       'mission, rocket, launchDate or destination missing'
@@ -23,15 +25,18 @@ const httpCreateLaunch = async (req, res) => {
   if (launchDate.toString() === 'Invalid Date')
     throw new BadRequestError('Invalid lunch date');
 
-  return res
-    .status(StatusCodes.CREATED)
-    .json(addLaunch({ mission, rocket, launchDate, destination }));
+  await scheduleNewLaunch(launch);
+  console.log('launch :>> ', launch);
+  return res.status(StatusCodes.CREATED).json(launch);
 };
 
 const httpDleteLaunch = async (req, res) => {
-  const flightNumber = req.params.flightNumber;
-  if (!launchExist(flightNumber)) throw new NotFoundError('Launch not found');
-  return res.status(StatusCodes.OK).json(abortLaunch(flightNumber));
+  const flightNumber = parseInt(req.params.flightNumber);
+  const isLaunch = await isLaunchExist(flightNumber);
+  if (!isLaunch) throw new NotFoundError('Launch not found');
+  const launch = await abortLaunch(flightNumber);
+  if (!launch) throw new BadRequestError('Invalid lunch date');
+  return res.status(StatusCodes.OK).json(launch);
 };
 
 module.exports = { httpGetAllLaunches, httpCreateLaunch, httpDleteLaunch };
