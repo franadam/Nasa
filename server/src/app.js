@@ -4,8 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 
-const planetRouter = require('./routes/planet.router');
-const launcheRouter = require('./routes/launch.route');
+// router
+const router = require('./routes/');
 
 // middlewares
 const errorHandlerMiddleware = require('./middlewares/error-handler.middleware');
@@ -24,8 +24,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
 // routes
-app.use('/api/v1/planets', planetRouter);
-app.use('/api/v1/launches', launcheRouter);
+app.use('/api/v1', router);
 
 app.use(errorHandlerMiddleware);
 

@@ -7,10 +7,23 @@ const {
   abortLaunch,
   scheduleNewLaunch,
 } = require('../models/launch.model');
+const getPagination = require('../services/pagination');
 
 const httpGetAllLaunches = async (req, res) => {
-  const launches = await getAllLaunches();
-  return res.status(StatusCodes.OK).json(launches);
+  const { query } = req;
+
+  const { limit, skip } = getPagination(query);
+  const sortBy = query.sortBy ? query.sortBy : 'flightNumber';
+  const order = query.order ? query.order : 'asc';
+
+  const response = getAllLaunches()
+    .limit(limit)
+    .sort({ [sortBy]: order })
+    .skip(skip);
+
+  const launches = await response;
+
+  return res.status(StatusCodes.OK).json({ launches, count: launches.length });
 };
 
 const httpCreateLaunch = async (req, res) => {
