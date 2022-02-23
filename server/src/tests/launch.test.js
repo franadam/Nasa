@@ -1,12 +1,16 @@
 const request = require('supertest');
 require('dotenv').config();
 const app = require('../app');
+const { loadLaunches } = require('../models/launch.model');
+const { loadPlanets } = require('../models/planet.model');
 const { connectDB, disconnectDB } = require('../services/mongo');
 const API_URL = '/api/v1/launches';
 
 describe('Launch API', () => {
   beforeAll(async () => {
     await connectDB(process.env.MONGOOSE_URI);
+    await loadPlanets();
+    await loadLaunches();
   });
 
   afterAll(async () => {
