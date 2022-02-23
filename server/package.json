@@ -7,7 +7,7 @@
     "test": "jest --watch",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "cluster": "pm2 start scr/index.js -l logs.text -i max"
+    "cluster": "pm2 start src/index.js -l logs.text -i max"
   },
   "jest": {
     "testEnvironment": "node"
